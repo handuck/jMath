@@ -1,8 +1,10 @@
 # jMath
 javascript stat library
 
-jMath is the statistics library written in JavaScript to run on the Internet Browsers. 
+jMath is the statistics library written in JavaScript to run on the Internet Browsers.
+
 To explain how to use jMath, I had written the Business Statistics book in Korean by myself.
+
 Also, you can find examples on the src folder. When you open html files, you can see results on console in the developer tools (F12 on Windows, Cmd+Alt+I on Mac). Some examples draw charts to show stat result by jqplot for 2D chart and SurfacePlot for 3D one. The chapter 2 on the textbook explains how to use jqplot.
 
 통계처리를 인터넷 브라우저에서서 처리할 수 있도록 JavaScript기반의 Math library인 jMath를 만들었습니다.
