@@ -1,0 +1,94 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var mu = 200;
+	var sigma = 20/Math.sqrt(30);
+
+	var plist = [];
+	for ( var i = 185; i < 215; i+=0.5 )
+	{
+		plist.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var a = jMath.stat.norminv(0.05, mu, sigma);
+	var b = jMath.stat.norminv(0.95, mu, sigma);
+
+	console.log( 1 - jMath.stat.normcdf( 208, mu, sigma ) );
+
+	var area1 = [];
+	var area2 = [];
+	for ( var i = 0 ; i <= a; i+=0.5 )
+	{
+		area1.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+	for ( var i = b ; i <= 215; i+=0.5 )
+	{
+		area2.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var title = {
+		text: 'PC방 팔거리 교체 평균: ' + mu + '일, Sample 평균 표준편차: ' + sigma.toFixed(2),
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '단위:일',
+		tickInterval: 5,
+		min: 185,
+		max: 215,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area1,area2,plist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

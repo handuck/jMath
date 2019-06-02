@@ -1,0 +1,86 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script>
+$(function(){
+
+var data = [ 192,198,199,199,197,201,202,203,197,196,204,206,207,202,199];
+
+var mean = jStat.mean(data);
+var stdev = jStat.stdev(data,true);
+
+var list = [ [], [], [] ];
+for ( var i = 185 ; i <= 215 ; i+=0.5 )
+{
+	list[1].push( [ i, jStat.normal.pdf( i, mean, stdev ) ] );
+}
+
+var range = [ mean - stdev, mean + stdev ];
+for ( var i = range[0] ; i < range[1] ; i+=0.5 )
+{
+	list[0].push( [ i, jStat.normal.pdf( i, mean, stdev ) ] );
+}
+list[0].push( [ i, jStat.normal.pdf( range[1], mean, stdev ) ] );
+
+for ( var i = 0; i <= data.length; i++ )
+{
+	list[2].push( [ data[i], jStat.normal.pdf( data[i], mean, stdev ) ] );
+}
+
+var title = {
+	text: '200mm 철판자른 Case 1의 68%영역',
+	fontSize: 20,
+	fontFamily: 'malgungothic',
+	textColor: 'royalblue'
+};
+
+var xaxis = {
+	min: 185,
+	max: 215,
+	label: '길이(mm)',
+	tickInterval: 2.5 
+};
+
+var yaxis = {
+	min: 0,
+	tickOptions: {
+		formatter: function(fmt,v){
+			return Math.floor(v * 100) + '%';
+		}
+	}
+};
+
+$.jqplot('chart', list, {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				fill: true,
+				fillColor: 'gold',
+			}, null,
+			{
+				showMarker: true,
+				showLine: false,
+				color: 'red'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

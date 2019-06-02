@@ -1,0 +1,113 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+function calcPi(numPoints, canvasId)
+{
+	var len = arguments.length == 0 ? 1000 : numPoints;
+	var cnt = 0;
+	var context = null;
+	if (arguments.length > 1)
+	{
+		var canvas = document.getElementById(canvasId);
+		context = canvas.getContext("2d");
+		canvas.width = canvas.width;
+		context.fillStyle = "blue";
+	}
+	for (var i = 0 ; i < len ; i++) {
+		var x = Math.random();
+		var y = Math.random();
+		if (context)
+		{
+			context.fillRect(x * canvas.width, y * canvas.height, 1, 1);
+		}
+		cnt += (Math.pow(x - 0.5, 2) + Math.pow(y - 0.5, 2)) <= 0.25 ? 1 : 0;
+	}
+	if (context)
+	{
+		context.strokeStyle = "#FF0000";
+		context.strokeRect(0, 0, canvas.width, canvas.height);
+
+		context.beginPath();
+		context.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, 2 * Math.PI, false);
+		context.strokeStyle = "#00FF00";
+		context.stroke();
+		context.closePath();
+	}
+	return cnt / len / 0.25;
+}
+
+function averagePi(numTrials) {
+	var sum = 0;
+	for (var i = 0 ; i < numTrials ; i++) {
+		sum += calcPi();
+	}
+	return sum / numTrials;
+}
+
+
+$(function(){
+	var list = [];
+	for ( var i = 0 ; i < 1000 ; i++ )
+	{
+		list.push( averagePi(30) );
+	}
+	var fdist = jMath(list).freqdist(function(v){
+		if ( v <= 3.1 ) return 3.1;
+		else if ( v >= 3.2 ) return 3.2;
+		return parseFloat(v.toFixed(2));
+	}).relfreqdist();
+
+	var title = {
+		text: '\u03c0 = 3.14 Central Limit Theorem',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		label: '값',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var yaxis = {
+		label : '확률',
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+        // BarRenderer를 위한 option값들
+		rendererOptions: {
+			barWidth: 20,     // bar의 폭
+			fillToZero: true  // series에 y축 최소값을 무조건 0으로 합니다.
+		}
+	}
+
+	$.jqplot('chart', [fdist.toArray()], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series
+	});						
+		
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

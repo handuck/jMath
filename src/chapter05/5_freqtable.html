@@ -1,0 +1,27 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var a = jMath([ 81, 92, 93, 83, 70, 88, 66, 63, 79, 77, 81, 51]);
+	var fdist = a.freqdist(function(v){
+		if ( v >= 90 ) return 'A';
+		else if ( v >= 80 ) return 'B';
+		else if ( v >= 70 ) return 'C';
+		else if ( v >= 70 ) return 'D';
+		return 'F';
+	});
+	console.log(fdist.toString());
+});
+
+
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>
+

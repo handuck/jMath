@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+
+var result;
+$(function(){
+	var ts = [
+		jMath([[1,138],[2,105],[3,123],[4,71],[5,52],[6,130],[7,93],[8,72],[9,81],[10,67],[11,53],[12,52]]), 
+		jMath([[1,146],[2,121],[3,112],[4,92],[5,73],[6,172],[7,81],[8,93],[9,103],[10,83],[11,91],[12,87]]),
+		jMath([[1,151],[2,133],[3,121],[4,102],[5,91],[6,196],[7,131],[8,121],[9,112],[10,101],[11,132],[12,112]])
+	];
+	var list = jMath.joinByRow(ts);
+	for ( var i = 0 ; i < list.length; i++ ) 
+	{
+		list[i][0] = i+1;
+	}
+//	list = jMath([ [1,97], [2,142], [3,108], [4,135], [5,120], [6,164], [7,126], [8,150], [9,123], [10,151], [11,141], [12,142] ]);
+//	list = jMath([ [1994,15.1], [1995,14.7], [1996,14.2], [1997,14.1], [1998,14.0], [1999,13.6], [2000,13.7], [2001,13.5], [2002,13.0], [2003,12.6], [2004,12.5], [2005,12.1], [2006,12.2], [2007,12.5], [2008,12.4], [2009,12.5], ]); 
+	result = list.forecast('season', 12);
+//	console.log( result.residues.toString() );
+	console.log(result);
+	var title = {
+		text: '2011~2013 신규가입 학원생수 Regression 예측',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		min: 0, 
+		max: list.length+1,
+		tickInterval: 1,
+		label : '월'
+	};
+
+	var yaxis = {
+		label : '학원생수',
+	};
+
+	var series = {
+		renderer: $.jqplot.LineRenderer,
+		showMarker: false,
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '실제값', '예측값' ],
+		location: 'nw'
+	}
+
+//	console.log( result.residues.abs().mean(3) );
+
+	$.jqplot('chart1', [list.toArray(), result.yHat.toArray()], {
+	 	title: title,
+		legend: legend,
+	  	axes: {
+		xaxis: {
+			min: 0, 
+			max: list.length+1,
+			tickInterval: 1,
+			label : '월'
+		},
+			yaxis: yaxis
+		},
+		series: [
+			{
+				showLine: false,
+				showMarker: true
+			},
+			{
+				showLine: true,
+				showMarker: false,
+			}
+		]
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart1" style="width:600px;height:400px"></div>
+	</body>
+</html>

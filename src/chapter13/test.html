@@ -1,0 +1,23 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+var list = [[2010,3167],[2009,2608],[2008,3050],[2007,2518],	
+	[2006,2390],[2005,1939],[2004,1617],[2003,1458]];
+var data = jMath(list);
+
+$(function(){
+//	var data = jMath( [ [3, 86], [6, 95], [4,92], [4, 83], [3,78], [2, 79] ] );
+var result = data.regress(0.05);
+console.log(result);
+});
+		</script>
+	<body>
+
+	</body>
+</html>

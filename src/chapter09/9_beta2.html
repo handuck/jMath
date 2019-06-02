@@ -1,0 +1,101 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var mu1 = 0.30;
+	var mu2 = 0.38;
+	var sigma1 = Math.sqrt( mu1 * ( 1 - mu1 ) / 200);
+	var sigma2 = Math.sqrt( mu2 * ( 1 - mu2 ) / 200);
+
+	var plist1 = [];
+	for ( var i = mu1 - 0.12 ; i <= mu1 + 0.12 ; i+=0.001 )
+	{
+		plist1.push( [i, jMath.stat.normpdf( i, mu1, sigma1 )]);		
+	}
+
+	var plist2 = [];
+	for ( var i = mu2 - 0.12; i <= mu2 + 0.12; i+=0.001 )
+	{
+		plist2.push( [i, jMath.stat.normpdf( i, mu2, sigma2 )]);		
+	}
+
+	var a = jMath.stat.norminv(0.990, mu1, sigma1);
+	console.log(a, jMath.stat.normcdf(a,mu2,sigma2) );
+
+	var area1 = [];
+	var area2 = [];
+	for ( var i = a ; i <= mu1 + 0.1 ; i+=0.001 )
+	{
+		area1.push( [i, jMath.stat.normpdf( i, mu1, sigma1 )]);		
+	}
+	for ( var i = mu2 - 0.12; i <= a; i+=0.001)
+	{
+		area2.push( [i, jMath.stat.normpdf( i, mu2, sigma2 )]);		
+	}
+	area2.push( [a, jMath.stat.normpdf( a, mu2, sigma2 )]);		
+
+	var title = {
+		text: '사진 스튜디오 이용률: \u03B1 = 0.01',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 0.03,
+		min: mu1 - 0.13,
+		max: mu2 + 0.13,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area1,area2,plist1,plist2], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				fill:true,
+				fillColor: 'blue',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

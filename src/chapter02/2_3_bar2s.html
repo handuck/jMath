@@ -1,0 +1,76 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var xlabels = ['15-18세', '19-23세', '24-29세', '30-34세', '35-39세', '40-49세', '50-59세'];
+
+	var males = [13.3,14.7,16.9,11.9,9,7.5,7.2];
+	var females = [13.8,12.6,14,12,9.6,8.9,8.1];
+
+	var title = {
+		text: '2011년 여성의 연령별 평균 영화 관람수',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+// x축이 category이므로 categryAxisRender.min.js가 필요합니다.
+	var xaxis = {
+		label: '연령',
+		renderer: $.jqplot.CategoryAxisRenderer,
+		ticks: xlabels
+	};
+
+	var yaxis = {
+		label : '관람수',
+		tickOptions: {
+// bar위의 값은 yaxis.tickOptions.formatString을 이용합니다.
+			formatString: '%3.1f'
+		}		
+	};
+
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+		rendererOptions: {
+			barMargin: 20,
+			fillToZero: true,
+		},
+// bar위에 값을 추가 합니다.
+// pointLabels.min.js가 필요합니다.
+// stackedValue를 true로 해서 bar값이 증가되는 값을 보여 줍니다.
+		pointLabels: { show: true, stackedValue: true }
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '남성', '여성' ]
+	}
+
+	$.jqplot('chart', [males,females], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+// stacked bar라는 것을 알려줍니다.
+		stackSeries: true,
+		seriesDefaults: series,
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

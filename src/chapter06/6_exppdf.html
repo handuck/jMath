@@ -1,0 +1,73 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var pdist0 = [];
+	var pdist1 = [];
+	var pdist2 = [];
+
+	var mu = [ 3, 5, 10 ];
+	for ( var i = 0; i <= 20 ; i+=0.5 )
+	{
+		pdist0.push( [ i, jMath.stat.exppdf( i, mu[0]) ]);
+		pdist1.push( [ i, jMath.stat.exppdf( i, mu[1]) ]);
+		pdist2.push( [ i, jMath.stat.exppdf( i, mu[2]) ]);
+	}
+
+
+	var title = {
+		text: '점심시간 중국집 배달요청 exponential dist',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '단위: 분(min)',
+		min: 0,
+		max: 20
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: "%3.2f"
+		}		
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: mu.map(function(v) {
+			  		return v + '분(\u03bb:' + (1/v).toFixed(2)   + ')';
+				})
+	}
+
+	$.jqplot('chart', [ pdist0, pdist1, pdist2 ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{ showMarker: false },
+			{ showMarker: false, color: 'red', linePattern: 'dashed' },
+			{ showMarker: false, color: 'green' }
+		],
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:330px"></div>
+	</body>
+</html>

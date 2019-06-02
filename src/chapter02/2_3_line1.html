@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var values = [];
+	for ( var d = 0, i=0 ; d < 720 ; d+= 10, i++ )
+	{
+		values[i] = [ d, Math.sin( d * Math.PI/180 ) ];
+	}
+	$.jqplot('chart', [values] );						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

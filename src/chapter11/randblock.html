@@ -1,0 +1,96 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var s1 = jMath('48 32 42 46 38');
+	var s2 = jMath('40 39 45 36 35');
+	var s3 = jMath('39 29 29 29 32');
+	var s4 = jMath('40 24 39 39 31');
+	/*
+	var s1 = jMath('5 4 6 6 4');
+	var s2 = jMath('8 7 8 7 5');
+	var s3 = jMath('8 4 7 5 3');
+	*/
+
+	var result = jMath.stat.anova1(0.05, s1,s2,s3,s4);
+	console.log(result);
+
+	var result = jMath.stat.anovarbl(0.05, s1,s2,s3,s4);
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0.01; i < 5; i+=0.01 )
+	{
+		plist.push( [i, jMath.stat.fpdf(i, result.between.df, result.error.df)]);		
+	}
+
+	var b = jMath.stat.finv(0.95, result.between.df, result.error.df);
+
+	var area = [];
+	for ( var i = b ; i <= 5; i+=0.01 )
+	{
+		area.push( [i, jMath.stat.fpdf( i, result.between.df, result.error.df)]);		
+	}
+
+	var title = {
+		text: 'F-distribution: DF1:'+ result.between.df + ', DF2:' + result.error.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: 'F static',
+		tickInterval: 0.5,
+		min: 0,
+		max: 5,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			}
+		]
+	});						
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

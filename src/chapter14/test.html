@@ -1,0 +1,87 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var data = jMath([ 
+		[1,100],
+		[1.2,180],
+		[1,270],
+		[1,200],
+		[1.2,260],
+		[1.1,210],
+		[1,230],
+		[1.4,175],
+		[1.5,350],
+		[1.6,300],
+		[1.7,360],
+		[1.8,310],
+		[1.9,380],
+		[2,460],
+		[2.2,430],
+		[2.4,350],
+		[2.5,410],
+		[2.7,600],
+		[2.9,560],
+		[3,670],
+		[3.3,690],
+		[3.1,620],
+		[3.3,700],
+		[3.4,710],
+		[3.5,800],
+		[3.7,810],
+		[3.7,700],
+		[3.8,650],
+		[3.9,850],
+		[4,800],
+		[4,1000],
+		[4.2,1100],
+		[4.3,1050],
+		[4.5,1500],
+		[4.7,1300],
+		[4.9,1200],
+		[5,1700],
+		[5.2,1900],
+		[5.4,2100],
+		[5.4,2200],
+		[6,2800],
+		[5.6,2600],
+		[5.8,2600],
+		[6.5,4100],
+		[6.1,4200],
+		[6.3,3400],
+		[6.4,5200],
+		[6.4,4000],
+		[6.5,4800],
+		[6.5,4400],
+		[6.6,3100],
+		[6.6,3900],
+		[6.7,6200],
+		[6.9,4200],
+		[6.9,5200],
+		[7,4100],
+		[7,6100]
+	]);
+	var result = data.regress();
+	var Y = data.slice(':', 1);
+	var X = data.slice(':', 0);
+	X = jMath.ones(Y.rows, 1)[':='](X);
+	result.residues = {
+		value: Y['-'](X['*'](result.B.value)),
+		corrcoef : []
+	};
+	X = data.slice( ':', 0 )[':='](result.residues.value.abs());
+	result.residues.corrcoef.push( X.corrcoef() );
+	console.log(result);
+});
+		</script>
+	<body>
+
+	</body>
+</html>

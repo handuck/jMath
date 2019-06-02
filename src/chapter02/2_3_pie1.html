@@ -1,0 +1,45 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pieRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+  
+	var xlabels = [ '연극', '무용', '양악', '국악' ];
+	var list = [ 47781, 3188, 8298, 3984 ].map( function(v, idx){
+		return [ xlabels[idx],v];
+	});
+	var title = {
+		text: '2013년 공연 횟수',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var series = {
+		renderer: $.jqplot.PieRenderer,
+		rendererOptions: {
+			showDataLabels: true
+		},
+	}
+
+	var legend = {
+		show: true,
+	  	location: 'e'
+	}
+
+	$.jqplot('chart', [list], {
+	 	title: title,
+		seriesDefaults: series,
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

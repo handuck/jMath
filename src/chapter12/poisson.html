@@ -1,0 +1,164 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var data = jMath([20,45,56,48,30,22,16,8,2,1]);
+	// var data = jMath([[0,22],[1,38],[2,39],[3,29],[4,15],[5,5],[6,2]]);
+	var result =  data.fitness_poiss();
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0; i < 27; i+=0.1 )
+	{
+		plist.push( [i, jMath.stat.chi2pdf(i, result.df)]);		
+	}
+
+	var b = jMath.stat.chi2inv(1-result.alpha, result.df);
+
+	var area = [];
+	for ( var i = b ; i <= 27; i+=0.1 )
+	{
+		area.push( [i, jMath.stat.chi2pdf( i, result.df)]);		
+	}
+
+	var line = [];
+	line.push( [ result.chi2, 0 ] );
+	line.push( [ result.chi2, jMath.stat.chi2pdf(result.chi2,result.df) ] );
+
+	var title = {
+		text: '\u03C7<sup>2</sup> distribution with DF '+ result.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 3,
+		min: 0,
+		max: 27,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red',
+				linePattern: 'dashed'
+			}
+		]
+	});						
+
+	var obs = [];
+	var expect = [];
+	var chi2 = [];
+
+	for ( var i = 0 ; i < result.prop.cols; i++ )
+	{
+		obs.push( [ i, result.prop[0][i] ]);
+		expect.push( [ i, result.expect[0][i] ]);
+		chi2.push( [ i, result.chi2norm[0][i] ]);
+	}
+
+	title = {
+		text: 'Poisson Distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	// x축이 category이므로 categryAxisRender.min.js가 필요합니다.
+	xaxis = {
+		label: '취소개수',
+	  	min: 0, 
+	    max: 8	
+	};
+
+	yaxis = {
+		max: 0.4,
+		min: 0,
+		label : '비율',
+		tickOptions: {
+		// bar위의 값은 yaxis.tickOptions.formatString을 이용합니다.
+			formatString: '%3.2f'
+		}		
+	};
+
+	var barSeries = {
+		showMarker: false,
+		showLine: true,
+		// bar위에 값을 추가 합니다.
+		// pointLabels.min.js가 필요합니다.
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '측정값', '기대값', 'chi2 비율' ]
+	}
+
+	$.jqplot('bar', [obs,expect], {
+		title: title,
+		axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			barSeries,
+			barSeries,
+			{
+				showMarker: false,
+				showLine: true,
+				color: 'red'
+			}
+		],
+		legend: legend
+	});			
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+		<p>
+		<div id="bar" style="width:600px;height:300px"></div>
+	</body>
+</html>

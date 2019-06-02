@@ -1,0 +1,23 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var values1 = [];
+	var values2 = [];
+	for ( var d = 0, i=0 ; d < 720 ; d+= 10, i++ )
+	{
+		values1[i] = [ d, Math.sin( d * Math.PI/180 ) ];
+		values2[i] = [ d, Math.cos( d * Math.PI/180 ) ];
+	}
+	$.jqplot('chart', [values1, values2] );						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

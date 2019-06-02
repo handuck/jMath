@@ -1,0 +1,103 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+
+function plot(elementId, data, title, xtitle, ytitle )
+{
+	var result = data.corrcoef();
+	console.log(xtitle,ytitle,result);
+	var title = {
+		text: title + '( r : ' + result.r.toFixed(2) + ' )',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+// ticks을 사용해서 x좌표에 표시될 값을 직접 알려줍니다.
+	var xaxis = {
+		label: xtitle,
+		tickInterval: 1,
+		tickOptions: {
+            // 기본이 실수형태이기 때문에 정수로 나타내주기 사용됩니다.
+			formatString: '%d'
+		}		
+	};
+// pad를 이용해서 y의 최대, 최소범위에 1.05배로 확장합니다.
+// 만일 max, min보다 이 값이 작다면 max, min으로 대신 사용됩니다.
+	var yaxis = {
+		label: ytitle,
+		pad: 1.05,
+	};
+
+	$.jqplot(elementId, [ data.toArray() ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+// 모든 series에 공통으로 적용되는 값입니다.
+		seriesDefaults: {
+			showLine: false,
+			showMarker: true,
+			markerOptions: { size: 10, style: 'filledCircle' }
+		}
+	});						
+}
+
+var data = [];
+
+$(function(){
+	data.push( jMath('47672	37087	26922	22403	17768	14397	10186	7541').transpose() );		
+	data.push( jMath('715	618	628	352	7009	9655	2247	3118').transpose());
+	data.push( jMath('4268	5257	5021	4201	1365	2183	1866	2229').transpose());
+	data.push( jMath('3167	2608	3050	2518	2390	1939	1617	1458').transpose());
+	data.push( jMath('120	150	263	350	264	377	534	937').transpose());
+
+	$('#btnDo').click(function(e){
+		var data1 = data[$('#sample1').val()].clone();
+		var data2 = data[$('#sample2').val()];
+		var title1 = $('#sample1').find(':selected').text();
+		var title2 = $('#sample2').find(':selected').text();
+		$('#chart').empty();
+		plot( 'chart', data1[':='](data2), '단윈(억)' ,title1, title2 );
+	});
+});
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>
+					<select id="sample1">
+						<option value="0" selected>온라인게임</option>
+						<option value="1">아케이드게임</option>
+						<option value="2">비디오게임</option>
+						<option value="3">모바일게임</option>
+						<option value="4">PC게임</option>
+					</select>
+				</td>
+				<td> ~ </td>
+				<td>
+					<select id="sample2">
+						<option value="0">온라인게임</option>
+						<option value="1" selected>아케이드게임</option>
+						<option value="2">비디오게임</option>
+						<option value="3">모바일게임</option>
+						<option value="4">PC게임</option>
+					</select>
+				</td>
+				<td>
+					<button id="btnDo">계산하기</button>
+				</td>
+			</tr>
+		</table>
+		<div id="chart" style="width:300px;height:300px"></div>
+	</body>
+</html>

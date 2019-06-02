@@ -1,0 +1,42 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var data = jMath([
+[193, 333,2044],
+[92, 223,1215],
+[220, 338,2236],
+[180, 307,1959],
+[105, 199,1131],
+[200, 305,2029],
+[172, 273,1718],
+[170, 342,1914],
+[116, 214,1390],
+[107, 241,1491],
+[187, 291,2054],
+[163, 297,1862],
+[115, 263,1447],
+[148, 221,1660],
+[195, 366,2138],
+[204, 335,2084],
+[148, 287,1703],
+[169, 322,1810],
+[146, 214,1447],
+[195, 375,2131]
+	]);
+  
+	result = data.regress(0.05,true);
+	console.log(result);
+});
+		</script>
+	<body>
+
+	</body>
+</html>

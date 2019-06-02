@@ -1,0 +1,74 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var normlist = [];
+	var tlist = [];
+	for ( var i = -3; i < 3; i+=0.05 )
+	{
+		normlist.push( [i, jMath.stat.normpdf( i, 0, 1)]);		
+		tlist.push( [i, jMath.stat.tpdf(i, 2)]);		
+	}
+
+	var title = {
+		text:  't-distribution(df=2) vs. normal distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 1,
+		min: -3,
+		max: 3,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ 't-dist', 'normal dist' ]
+	}
+
+	$.jqplot('chart', [tlist,normlist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+		},
+		legend: legend,
+		series: [
+			null,
+			{
+				linePattern: 'dashed'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

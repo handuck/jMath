@@ -1,0 +1,102 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var s1 = jMath('13.7 9.8 11.9 5.3 2.8 14.8 4.1 1.6');
+	var s2 = jMath('0.7	20.2 5.7 6.1 22.8 12.5 0.4 11.6');
+	var s3 = jMath('13.0 4.0 7.7 2.0 8.6 3.7 7.2 9.8');
+
+
+	var result = jMath.stat.anova1(0.05, s1,s2,s3);
+	console.log(result);
+
+	/*
+	var diff = result.means[0] - result.means[3];
+	var sd = Math.sqrt(  result.within.ms * ( 1/s1.cols + 1/s3.cols ) );
+	console.log( diff/sd,  
+			jMath.stat.tinv(0.975, result.within.df)  );
+
+	var diff = result.means[0] + result.means[1] - result.means[3] - result.means[2];
+	sd = Math.sqrt( result.within.ms * ( result.numGroups - 1 ) * result.Fcrit * 4/s1.cols);
+	console.log( diff - sd, diff + sd );
+	*/
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0.01; i < 5; i+=0.01 )
+	{
+		plist.push( [i, jMath.stat.fpdf(i, result.between.df, result.within.df)]);		
+	}
+
+	var b = jMath.stat.finv(0.95, result.between.df, result.within.df);
+
+	var area = [];
+	for ( var i = b ; i <= 5; i+=0.01 )
+	{
+		area.push( [i, jMath.stat.fpdf( i, result.between.df, result.within.df)]);		
+	}
+
+	var line = [];
+	line.push([ result.F, 0]);
+	line.push([ result.F, jMath.stat.fpdf( result.F, result.between.df, result.within.df ) ]);
+
+	var title = {
+		text: 'F-distribution: DF1:'+ result.between.df + ', DF2:' + result.within.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: 'F static',
+		tickInterval: 0.5,
+		min: 0,
+		max: 5,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{ color: 'green' },
+			{ color: 'red' }
+		]
+	});						
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

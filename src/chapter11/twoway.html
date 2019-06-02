@@ -1,0 +1,81 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+/*		
+	var s11 = jMath('889 862 818 862 795');
+	var s12 = jMath('896 876 869 825 802');
+	var s13 = jMath('1096 903 984 935 929');
+	var s21 = jMath('606 569 576 615 655');
+	var s22 = jMath('593 577 623 600 577');
+	var s23 = jMath('644 621 677 667 700');
+*/
+
+	var s11 = jMath('50 48 60 55 57');
+	var s12 = jMath('68 72 63 67 71');
+	var s13 = jMath('61 65 62 63 66');
+	var s21 = jMath('80 77 65 77 78');
+	var s22 = jMath('90 91 97 89 92');
+	var s23 = jMath('81 83 75 81 82');
+
+	var result = jMath.stat.anova2(0.05, [[s11,s12,s13],[s21,s22,s23]]);
+	console.log(result);
+
+	var plist = [];
+	for ( var i = 0 ; i < result.means.cell.length ; i++ )
+	{
+		plist[i] = [];
+		for ( var j = 0 ; j < result.means.cell[0].length; j++ )
+		{
+			plist[i].push( [ '메뉴' + (j+1), result.means.cell[i][j]] );
+		}
+	}
+
+	var title = {
+		text: '아침 메뉴와 고객 성별의 상호 영향',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var yaxis = {
+		label : '판매량 평균',
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '남성', '여성' ]
+	};
+
+	$.jqplot('chart', plist, {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

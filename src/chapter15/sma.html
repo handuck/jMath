@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var ts = [
+		jMath([[1,138],[2,105],[3,123],[4,71],[5,52],[6,130],[7,93],[8,72],[9,81],[10,67],[11,53],[12,52]]), 
+		jMath([[1,146],[2,121],[3,112],[4,92],[5,73],[6,172],[7,81],[8,93],[9,103],[10,83],[11,91],[12,87]]),
+		jMath([[1,151],[2,133],[3,121],[4,102],[5,91],[6,196],[7,131],[8,121],[9,112],[10,101],[11,132],[12,112]])
+	];
+	var list = jMath.joinByRow(ts);
+	for ( var i = 0 ; i < list.rows ; i++ )
+	{
+		list[i][0] = i+1;
+	}
+	var fcast3 = list.forecast('sma',3);
+	var fcast5 = list.forecast('sma',5);
+
+	console.log(fcast3);
+
+	var title = {
+		text: '2011~2013 신규가입 학원생수 SMA 예측',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		min: 0, 
+		max: 37,
+		tickInterval: 1,
+		label : '월'
+	};
+
+	var yaxis = {
+		label : '학원생수',
+	};
+
+	var series = {
+		renderer: $.jqplot.LineRenderer,
+		showMarker: false,
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '실제값', '예측값(p=3)', '예측값(p=5)' ],
+		location: 'nw'
+	}
+
+	$.jqplot('chart', [list.toArray(), fcast3.toArray(), fcast5.toArray() ], {
+	 	title: title,
+		legend: legend,
+	  	axes: {
+		xaxis: {
+			min: 0, 
+			max: 37,
+			tickInterval: 1,
+			label : '월'
+		},
+			yaxis: yaxis
+		},
+		seriesDefaults: series
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:400px"></div>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var data = jMath('28 31 29 28 29 27 28 32 32 30 27 28 29 31 27 27 28 30 31 30 29 30 28 31 28 30 28 29 30 31');
+//	var data = jMath([4.4,3.9,4.2,4.5,2.3,2.7, 4.2,6.0,6.2,6.0,5.0,5.1, 1.9,1.8,5.6,4.3,3.6,5.3, 4.0,6.1,6.1,3.4,1.3,5.0]);
+	var result =  data.test_v(0.05, 'twotail', 4);
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	var chi2max = 60; // Math.ceil(result.chi2crit + 9);
+	for ( var i = 0.1; i < chi2max; i+=0.1 )
+	{
+		plist.push( [i, jMath.stat.chi2pdf(i, result.df)]);		
+	}
+
+	var b1 = jMath.stat.chi2inv(result.alpha/2, result.df);
+	var b2 = jMath.stat.chi2inv(1-result.alpha/2, result.df);
+
+	var area = [];
+	for ( var i = b1 ; i <= b2 ; i+=0.1 )
+	{
+		area.push( [i, jMath.stat.chi2pdf( i, result.df)]);		
+	}
+
+	var line = [];
+	line.push( [ result.chi2, 0 ] );
+	line.push( [ result.chi2, jMath.stat.chi2pdf(result.chi2,result.df) ] );
+
+	var title = {
+		text: '\u03C7<sup>2</sup> distribution with DF '+ result.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 5,
+		min: 0,
+		max: chi2max,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red',
+			}
+		]
+	});						
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

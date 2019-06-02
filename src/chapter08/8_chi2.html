@@ -1,0 +1,70 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var chi2_10 = [];
+	var chi2_20 = [];
+	var chi2_30 = [];
+	for ( var i = 0; i < 50; i+=0.05 )
+	{
+		chi2_10.push( [i, jMath.stat.chi2pdf( i, 10)]);		
+		chi2_20.push( [i, jMath.stat.chi2pdf( i, 20)]);		
+		chi2_30.push( [i, jMath.stat.chi2pdf( i, 30)]);		
+	}
+
+	var title = {
+		text:  '\u03A7<sup>2</sup> distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 5,
+		min: 0,
+		max: 50,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ 'df 10', 'df 20', 'df 30' ]
+	}
+
+	$.jqplot('chart', [chi2_10,chi2_20,chi2_30], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+		},
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

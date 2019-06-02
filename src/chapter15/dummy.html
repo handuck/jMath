@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+
+var result;
+$(function(){
+	var list = jMath([ [1,27], [2,25], [3,29], [4,28], [5,46], [6,39], [7,35], [8,36], [9,54.5], [10,43.6], [11,35], [12,37.5] ]);
+	result = list.forecast('dummy', 4);
+//	console.log( result.residues.toString() );
+	console.log(result);
+	var title = {
+		text: '2011~2013 신규가입 학원생수 Regression 예측',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		min: 0, 
+		max: list.length+1,
+		tickInterval: 1,
+		label : '월'
+	};
+
+	var yaxis = {
+		label : '학원생수',
+	};
+
+	var series = {
+		renderer: $.jqplot.LineRenderer,
+		showMarker: false,
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '실제값', '예측값' ],
+		location: 'nw'
+	}
+
+//	console.log( result.residues.abs().mean(3) );
+
+	$.jqplot('chart1', [list.toArray(), result.yHat.slice(':', [0,result.yHat.cols-1]).toArray()], {
+	 	title: title,
+		legend: legend,
+	  	axes: {
+		xaxis: {
+			min: 0, 
+			max: list.length+1,
+			tickInterval: 1,
+			label : '월'
+		},
+			yaxis: yaxis
+		},
+		series: [
+			{
+				showLine: false,
+				showMarker: true
+			},
+			{
+				showLine: true,
+				showMarker: false,
+			}
+		]
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart1" style="width:600px;height:400px"></div>
+	</body>
+</html>

@@ -1,0 +1,57 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var pdist = [];
+	var mu = 0;
+	var sigma = 1;
+	for ( var i = -3.5; i <= 3.5; i+=0.1 )
+	{
+		pdist.push( [ i, jMath.stat.normpdf( i, mu, sigma) ]);
+	}
+
+	var title = {
+		text: 'Starndard Normal Distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: 'z-Score',
+		min: -4,
+		max: 4
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: "%3.2f"
+		}		
+	};
+
+	$.jqplot('chart', [ pdist ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{ showMarker: false }
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:330px"></div>
+	</body>
+</html>

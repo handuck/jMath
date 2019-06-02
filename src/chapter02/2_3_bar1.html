@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var values = [1,2,3,4,5,6,5,4,3,2,1].map( function(v,idx){
+		return [idx,v];
+	});
+
+	var title = {
+		text: 'CategoryAxisRenderer가 없을 경우',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	$.jqplot('chart', [values], {
+	 	title: title,
+		seriesDefaults: {
+			renderer: $.jqplot.BarRenderer,
+			rendererOptions: {
+				barWidth: 30
+			}	
+		}
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

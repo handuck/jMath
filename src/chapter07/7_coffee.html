@@ -1,0 +1,91 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+
+var coffeeweights = [];
+for ( var i = 0 ; i < 10000 ; i++ )
+{
+	var p = Math.random() * 0.1 + 0.95;
+	coffeeweights.push( parseFloat(p.toFixed(3)) );
+}
+        
+function averageWeight(numSamples)
+{
+	var p = jMath.sampling(numSamples, coffeeweights.length )
+		.reduce( function(acc,value,index) {
+			return coffeeweights[value] + acc;
+		},0)/numSamples;
+	return parseFloat(p.toFixed(3));
+}
+
+$(function(){
+	var list = [];
+	for ( var i = 0 ; i < 300 ; i++ )
+	{
+		list.push( averageWeight(30) );		
+	}
+
+	var mu = coffeeweights.reduce( function(acc,value){
+			return acc + value;
+		},0) / coffeeweights.length;
+
+	mu = mu.toFixed(5);
+
+	var fdist = jMath(list).freqdist(function(v){
+			var idx = Math.round(((v - 0.950) * 1000)/5);
+			return (0.95 + 0.005 * idx).toFixed(3);
+		}).relfreqdist();
+	var title = {
+		text: mu + 'kg Central Limit Theorem',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		label: 'kg',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var yaxis = {
+		label : '확률',
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+        // BarRenderer를 위한 option값들
+		rendererOptions: {
+			barWidth: 20,     // bar의 폭
+			fillToZero: true  // series에 y축 최소값을 무조건 0으로 합니다.
+		}
+	}
+
+	$.jqplot('chart', [fdist.toArray()], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series
+	});						
+		
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

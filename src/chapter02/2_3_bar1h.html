@@ -1,0 +1,66 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+    // x축에 사용될 category들
+	var xlabels = ['15-18세', '19-23세', '24-29세', '30-34세', '35-39세', '40-49세', '50-59세'];
+    // 여성의 평균 관람수 (x,y)생성
+	// 수평으로 그래기 우해 수직에 x,y값은 y,x형태로 있으어 합니다.
+	var females = [13.8,12.6,14,12,9.6,8.9,8.1].map( function(v,idx){
+		return [ v, xlabels[idx] ];
+	});
+
+	var title = {
+		text: '2011년 여성의 연령별 평균 영화 관람수',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // y축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var yaxis = {
+		label: '연령',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var xaxis = {
+		label : '관람수',
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+		// 수평으로 그릴 때 그림자가 45도면 bar보다 크게 나와서 135도로 합니다
+		shadowAngle: 135,
+        // BarRenderer를 위한 option값들
+		rendererOptions: {
+			barWidth: 20,     // bar의 폭
+			fillToZero: true, // series에 y축 최소값을 무조건 0으로 합니다.
+			barDirection: 'horizontal' // 수평으로 그리게 합니다
+		}
+	}
+
+	$.jqplot('chart', [females], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:400px"></div>
+	</body>
+</html>

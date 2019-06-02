@@ -1,0 +1,94 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var s1	=jMath('22.6	28	22.6	28.6	24.1	30');
+	var s2	=jMath('23.3	29.6	22.1	29.1	27.7	29.4');
+	var s3	=jMath('23	30.1	23.3	29.4	26	30.7');
+
+	var result = jMath.stat.anova1(0.05, s1,s2,s3);
+	console.log(result);
+
+	var result = jMath.stat.anovarbl(0.05, s1,s2,s3);
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0.01; i < 5; i+=0.01 )
+	{
+		plist.push( [i, jMath.stat.fpdf(i, result.between.df, result.error.df)]);		
+	}
+
+	var b = jMath.stat.finv(0.95, result.between.df, result.error.df);
+
+	var area = [];
+	for ( var i = b ; i <= 5; i+=0.01 )
+	{
+		area.push( [i, jMath.stat.fpdf( i, result.between.df, result.error.df)]);		
+	}
+
+	var line = [];
+	line.push([ result.F.between.value, 0]);
+	line.push([ result.F.between.value, 
+				jMath.stat.fpdf( result.F.between.value, result.between.df, result.error.df ) ]);
+
+	var title = {
+		text: 'F-distribution: DF1:'+ result.between.df + ', DF2:' + result.error.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: 'F static',
+		tickInterval: 0.5,
+		min: 0,
+		max: 5,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{ color: 'green' },
+			{ color: 'red' }
+		]
+	});						
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

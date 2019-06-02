@@ -1,0 +1,78 @@
+
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var list = [];
+	var mu = 50;
+	var sigma = 15/Math.sqrt(30);
+	for ( var i = 40 ; i < 60 ; i+=0.5 )
+	{
+		list.push( [ i, jMath.stat.normpdf(i,mu,sigma) ] );
+	}
+	var over = [];
+	for ( var i = 53; i < 60 ; i+= 0.5 )
+	{
+		over.push( [ i, jMath.stat.normpdf(i,mu,sigma) ] );
+	}
+
+	var title = {
+		text: 'Sample평균이 53개 이상일 확률', 
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		label: '아메리카노 판매 개수',
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+        // BarRenderer를 위한 option값들
+		rendererOptions: {
+			barWidth: 20,     // bar의 폭
+			fillToZero: true  // series에 y축 최소값을 무조건 0으로 합니다.
+		}
+	}
+
+	$.jqplot('chart', [ over, list ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: { 
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{ showLine: true, fill: true, fillColor: 'tomato' },
+			null
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

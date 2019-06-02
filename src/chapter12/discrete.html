@@ -1,0 +1,172 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+/*
+	var data = jMath([58,21,27,20, 71,43]);
+	result = data.fitness( 0.1, 5, [ 0.2, 0.1, 0.1, 0.15, 0.25, 0.2] );
+	console.log(result);
+*/
+	var data = jMath([570,134,185,50,61]);
+	var result = data.fitness( 0.1, 4, [ 0.555, 0.117, 0.201, 0.077, 0.05] );
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0; i < 18; i+=0.1 )
+	{
+		plist.push( [i, jMath.stat.chi2pdf(i, result.df)]);		
+	}
+
+	var b = jMath.stat.chi2inv(1-result.alpha, result.df);
+
+	var area = [];
+	for ( var i = b ; i <= 18; i+=0.1 )
+	{
+		area.push( [i, jMath.stat.chi2pdf( i, result.df)]);		
+	}
+
+	var line = [];
+	line.push( [ result.chi2, 0 ] );
+	line.push( [ result.chi2, 0.2] );
+
+	var title = {
+		text: '\u03C7<sup>2</sup> distribution with DF '+ result.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 1,
+		min: 0,
+		max: 18,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red',
+				linePattern: 'dashed'
+			}
+		]
+	});						
+
+	var obs = [];
+	var expect = [];
+	var chi2 = [];
+	var ages = ['직장인', '가정주부', '대학(원)생', '자유직', '기타'];
+
+	for ( var i = 0 ; i < result.prop.cols; i++ )
+	{
+		obs.push( [ ages[i], result.prop[0][i] ]);
+		expect.push( [ ages[i], result.expect[0][i] ]);
+		chi2.push( [ ages[i], result.chi2norm[0][i] ]);
+	}
+
+	title = {
+		text: '비율',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	// x축이 category이므로 categryAxisRender.min.js가 필요합니다.
+	xaxis = {
+		label: '연령',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	yaxis = {
+		max: 0.8,
+		min: 0,
+		label : '비율',
+		tickOptions: {
+		// bar위의 값은 yaxis.tickOptions.formatString을 이용합니다.
+			formatString: '%3.2f'
+		}		
+	};
+
+	var barSeries = {
+		renderer: $.jqplot.BarRenderer,
+		rendererOptions: {
+			barWidth: 20,
+			fillToZero: true
+		},
+		// bar위에 값을 추가 합니다.
+		// pointLabels.min.js가 필요합니다.
+		pointLabels: { show: true }
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '측정값', '기대값', 'chi2 비율' ]
+	}
+
+	$.jqplot('bar', [obs,expect, chi2], {
+		title: title,
+		axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			barSeries,
+			barSeries,
+			{
+				showMarker: false,
+				showLine: true,
+				color: 'red'
+			}
+		],
+		legend: legend
+	});			
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+		<p>
+		<div id="bar" style="width:600px;height:300px"></div>
+	</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var X = jMath('16;14;5;12;8;21;11;16;8;17');
+	var Y = jMath('179.3353;168.2739; 52.4114; 127.9184; 117.682; 310.394; 141.6365; 164.7824; 89.3912; 200.0185');
+
+	X = jMath.ones(Y.rows, 1)[':='](X);
+	XT = X.transpose();
+
+	var XXTinv = XT['*'](X).inv();
+	var XXTinv_XT = XXTinv['*'](XT);
+	var B = XXTinv_XT['*'](Y);
+	console.log(B.toString());
+  
+    var C = XT['*'](X).inv()['*'](XT)['*'](Y);
+  	console.log(C.toString());
+  
+var list = jMath([ [1,27], [2,25], [3,29], [4,28], [5,46], [6,39], [7,35], [8,36], [9,54.5], [10,43.6], [11,35], [12,37.5] ]);
+result = list.forecast('dummy', 4);
+console.log(result.mad);
+    
+});
+		</script>
+	<body>
+
+	</body>
+</html>

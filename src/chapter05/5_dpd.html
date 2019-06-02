@@ -1,0 +1,66 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+    // x축에 사용될 category들
+    // 여성의 평균 관람수 (x,y)생성
+	var pdist = m$('0 14; 1 12; 2 3; 3 1; 4 1').relfreqdist();
+
+	console.log( pdist.toString() );
+	console.log( pdist.dpdmean() );
+
+	var title = {
+		text: '30일 동안 환불 확률 분포',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		label: '하루 환불 횟수',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var yaxis = {
+		label : '확률',
+		tickOptions: {
+			formatter: function(fmt,v)
+			{
+				return (v*100).toFixed(2) + "%";
+			}
+		}		
+	};
+
+    // Bar chart를 위해 jqplot.barRenderer.min.js가 필요
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+        // BarRenderer를 위한 option값들
+		rendererOptions: {
+			barWidth: 20,     // bar의 폭
+			fillToZero: true  // series에 y축 최소값을 무조건 0으로 합니다.
+		}
+	}
+
+	$.jqplot('chart', [ pdist.toArray()  ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

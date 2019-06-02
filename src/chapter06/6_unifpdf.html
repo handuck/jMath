@@ -1,0 +1,53 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var pdist = [ [30, jMath.stat.unifpdf(30,30,60)], 
+				  [60, jMath.stat.unifpdf(60,30,60)] ];
+
+	var title = {
+		text: '지하철 연착 시간 uniform dist',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '단위: 초(sec)',
+		min: 20,
+		max: 70,
+		tickInterval: 5
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: "%3.2f"
+		}		
+	};
+
+	$.jqplot('chart', [ pdist ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{ showMarker: false, fill: true } 
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:330px"></div>
+	</body>
+</html>

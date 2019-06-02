@@ -1,0 +1,70 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var f_10_15 = [];
+	var f_15_15 = [];
+	var f_20_15 = [];
+	for ( var i = 0.05; i < 3; i+=0.05 )
+	{
+		f_10_15.push( [i, jMath.stat.fpdf( i, 10, 20)]);		
+		f_15_15.push( [i, jMath.stat.fpdf( i, 20, 20)]);		
+		f_20_15.push( [i, jMath.stat.fpdf( i, 30, 20)]);		
+	}
+
+	var title = {
+		text:  'F distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 1,
+		min: 0,
+		max: 3,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ 'df 10/20', 'df 20/20', 'df 30/20' ]
+	}
+
+	$.jqplot('chart', [f_10_15,f_15_15,f_20_15], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+		},
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

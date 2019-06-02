@@ -1,0 +1,57 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var pdist = [];
+	var mu = 100;
+	var sigma = 2;
+	for ( var i = 95; i <= 105; i+=0.05 )
+	{
+		pdist.push( [ i, jMath.stat.normpdf( i, mu, sigma) ]);
+	}
+
+	var title = {
+		text: '1초마다 속도 측정한 분포',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '속도(km/h)',
+		min: 95,
+		max: 105
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: "%3.2f"
+		}		
+	};
+
+	$.jqplot('chart', [pdist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{ showMarker: false },
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:330px"></div>
+	</body>
+</html>

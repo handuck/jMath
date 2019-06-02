@@ -1,0 +1,62 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var mu = 1850;
+	var sigma = 120/Math.sqrt(30);
+
+	var plist = [];
+	for ( var i = 0.05 ; i <= 0.96 ; i+=0.05 )
+	{
+		plist.push( [i, jMath.stat.numSamples(0.05, 0.02, i, true)]);		
+	}
+
+	var title = {
+		text: '95% CI, \u00B12%를 위한 필요한 sample크기 ',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '비율',
+		tickInterval: 0.1,
+		min: 0.0,
+		max: 1,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '개수',
+		min: 0,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	$.jqplot('chart', [plist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+		}
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

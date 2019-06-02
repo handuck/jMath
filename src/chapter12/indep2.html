@@ -1,0 +1,183 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<title>2013년 지역별 만대당 자동차사고</title>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var regions = ['서울', '부산', '경기', '강원', '충북', '충남', '전북', '전남', '경남', '제주', '대구', '인천', '광주', '대전', '울산', '세종'];
+	var data = jMath([[1.3, 190.9],
+				[1.8, 148.2],
+				[2.1, 151.2],
+				[3.7, 224.4],
+				[4.2, 211],
+				[4.7,143.6],
+				[4.6,192.3],
+				[5.8,210.3],
+				[3.2,136],
+				[3.2,191.8],
+				[1.6,189.7],
+				[1.4,119],
+				[2,230.4],
+				[1.5,135.8],
+				[2.6,150.6],
+				[4, 141]]);
+
+//	var data = jMath([[30,16,8],[22,25,19],[8,9,13]]);
+	var result =  data.test_indep(0.05);
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	var chi2max = Math.ceil(result.chi2crit + 9);
+	for ( var i = 0.05; i < chi2max; i+=0.05 )
+	{
+		plist.push( [i, jMath.stat.chi2pdf(i, result.df)]);		
+	}
+
+	var b = jMath.stat.chi2inv(1-result.alpha, result.df);
+
+	var area = [];
+	for ( var i = b ; i <= chi2max; i+=0.05 )
+	{
+		area.push( [i, jMath.stat.chi2pdf( i, result.df)]);		
+	}
+
+	var line = [];
+	line.push( [ result.chi2, 0 ] );
+	line.push( [ result.chi2, jMath.stat.chi2pdf(result.chi2,result.df) ] );
+
+	var title = {
+		text: '\u03C7<sup>2</sup> distribution with DF '+ result.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 4,
+		min: 0,
+		max: chi2max,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red',
+			}
+		]
+	});						
+
+	var death = data.slice(':',0);
+	var accident = data.slice(':',1);
+
+	death = death['./']( death.sum(3) );
+	accident = accident['./']( accident.sum(3) );
+
+	var dlist = [];
+	var alist = [];
+
+	for ( var i = 0 ; i < regions.length; i++ )
+	{
+		dlist.push( [death[i][0]*100, regions[i]]);
+		alist.push( [accident[i][0]*100, regions[i]]);
+	}
+
+	title = {
+		text: '비율',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	// x축이 category이므로 categryAxisRender.min.js가 필요합니다.
+	xaxis = {
+		min: 0,
+		label : '비율',
+		tickOptions: {
+		// bar위의 값은 yaxis.tickOptions.formatString을 이용합니다.
+			formatString: '%3.1f%%'
+		}		
+	};
+
+	yaxis = {
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var barSeries = {
+		renderer: $.jqplot.BarRenderer,
+		rendererOptions: {
+			barWidth: 10,
+			fillToZero: true,
+			barDirection: 'horizontal',
+		},
+		// bar위에 값을 추가 합니다.
+		// pointLabels.min.js가 필요합니다.
+		pointLabels: { show: true }
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '사망률', '사고률' ]
+	}
+
+	$.jqplot('bar', [dlist,alist], {
+		title: title,
+		axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			barSeries,
+			barSeries,
+		],
+		legend: legend
+	});			
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+		<p>
+		<div id="bar" style="width:600px;height:1000px"></div>
+	</body>
+</html>

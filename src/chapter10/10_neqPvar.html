@@ -1,0 +1,30 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+/*
+	var s1 = jMath([24.2, 26.1, 28.8, 30.1, 24.6, 29.1, 28.2, 27.4, 28.3, 27.9]);
+	var s2 = jMath([23.0, 21.7, 32.7, 20.7, 31.1, 19.6, 26.5, 21.1, 20.6, 27.2, 26.8]);
+	var result = s1.compare(0.05,0,s2,0);
+	console.log(result);
+*/
+
+	var s1 = jMath('352	298	297	220	402	287	229	435	278	241	271	215	188	553	466	331	174	213	282	379	167	67	155	333	339	345	287	318	252	386');
+	var s2 = jMath('227	391	274	320	400	444	249	463	409	344	332	330	323	352	355	424	487	392	331	406	366	257	435	378	362	396	374	265	335	337');
+	var result = s1.compare(0.05,0,s2,0);
+	console.log(result);
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

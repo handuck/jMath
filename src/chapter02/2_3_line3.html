@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var values1 = [];
+	var values2 = [];
+	for ( var d = 0, i=0 ; d < 720 ; d+= 10, i++ )
+	{
+		values1[i] = [ d, Math.sin( d * Math.PI/180 ) ];
+		values2[i] = [ d, Math.cos( d * Math.PI/180 ) ];
+	}
+
+	var title = {
+		text: 'Sin과 Cos 그래프 예제',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label : '각도',
+		min: 0,
+		max: 720,
+		tickOptions: {
+			formatString: '%d도'
+		}		
+	};
+
+	var yaxis = {
+		label : '값',
+		max: 1.05,
+		min: -1.05,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	var series = {
+		renderer: $.jqplot.LineRenderer,
+		showMarker: false
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ 'sin', 'cos' ]
+	}
+
+	$.jqplot('chart', [values1, values2], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		legend: legend,
+		seriesDefaults: series
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

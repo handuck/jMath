@@ -1,0 +1,87 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.highlighter.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.cursor.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+    // x축에 사용될 category들
+    // 여성의 평균 관람수 (x,y)생성
+
+	var pdist = [];
+	var cdist = [];
+	var len = 8;
+	var s =0;
+	for ( var i = 0 ; i <= len ; i++ )
+	{
+		var p = jMath.stat.poisspdf( i, 1.82 );
+		s += p;
+		pdist.push( [ i, p] );
+		cdist.push( [ i, s] );
+	}
+
+	var title = {
+		text: '119 긴급출동 Poisson distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		label: '요청수',
+		renderer: $.jqplot.CategoryAxisRenderer
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		max: 1.05,
+		tickOptions: {
+			formatter: function(fmt,v)
+			{
+				return (v*100).toFixed(2) + "%";
+			}
+		}		
+	};
+
+
+	$.jqplot('chart', [ pdist, cdist ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [ 
+			{ 
+				renderer: $.jqplot.BarRenderer,
+				rendererOptions: {
+					barWidth: 20,     // bar의 폭
+					fillToZero: true  // series에 y축 최소값을 무조건 0으로 합니다.
+				}
+			},
+			{ 
+				renderer: $.jqplot.LineRenderer,
+				color: 'red'
+			}
+		],
+		highlighter: { 
+			show:true,
+	 		sizeAdjust: 10
+	   	}
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:600px"></div>
+	</body>
+</html>

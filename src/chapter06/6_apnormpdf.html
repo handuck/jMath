@@ -1,0 +1,82 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var list = jMath('61	60	58	62	46	49	50	58	58	55	61	49	48	50	60	59	54	68	55	49	52	61	57	53	64	52	49	53	55	51	57	57	50	45	54	54	49	48	60	46	43	49	49	49	51	55	45	44	48	47	47	47	55	43	49	49	41	43	42	47	38	39	46');
+	var mu = list.mean();
+	var sigma = list.std();
+
+	var plist = [];
+	for ( var i = 32 ; i < 72 ; i+=0.5 )
+	{
+		plist.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var area = [];
+	for ( var i = 50 ; i <= 60; i+=0.5 )
+	{
+		area.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var title = {
+			text: '2004 ~ 2012 7개 광역도시 미세먼저<br>' +
+			'평균: ' + mu[0][0].toFixed(2) + ', 표준편차: ' + sigma[0][0].toFixed(2),
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+    // x축의 값이 category이므로 jqplot.categoryAxisRenderer.min.js가 필요
+	var xaxis = {
+		min: 30,
+	 	max: 75,
+		label: '단위:\u03BCg/m<sup>2</sup>',
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, {
+				color: 'green'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script>
+$(function(){
+
+var data = [ [192,198,199,199,197,201,202,203,197,196,204,206,207,202,199],
+[192, 193, 194, 193, 197, 201, 203, 207, 195, 196, 205, 206, 207, 204, 199],
+[197, 198, 199, 199, 197, 201, 202, 203, 197, 197, 202, 201, 203, 202, 199]];
+
+
+var mean = [];
+var stdev = [];
+for ( var i = 0 ; i < data.length; i++ )
+{
+	mean[i] = jStat.mean(data[i]);
+	stdev[i] = jStat.stdev(data[i],true);
+}
+
+var list = [];
+for ( var d = 0 ; d < data.length; d++ )
+{
+	list[d] = [];
+	for ( var i = 185 ; i <= 215 ; i+=0.5 )
+	{
+		list[d].push( [ i, jStat.normal.pdf( i, mean[d], stdev[d] ) ] );
+	}
+}
+
+var title = {
+	text: '2m 철판자른 길이 예상 분포',
+	fontSize: 20,
+	fontFamily: 'malgungothic',
+	textColor: 'royalblue'
+};
+
+var xaxis = {
+	label: '철판 길이(cm)',
+};
+
+var yaxis = {
+	label : '%'
+};
+
+var series = {
+	showMarker: false
+}
+
+var legend = {
+	renderer: $.jqplot.EnhancedLegendRenderer,
+	show: true,
+	labels: [ 'Case 1', 'Case 2', 'Case 3' ]
+}
+
+$.jqplot('chart', list, {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series,
+		legend: legend
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

@@ -1,0 +1,111 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var mu1 = 200;
+	var mu2 = 210;
+	var sigma = 20/Math.sqrt(30);
+
+	var plist1 = [];
+	for ( var i = mu1 - 15 ; i < mu1 + 15 ; i+=0.5 )
+	{
+		plist1.push( [i, jMath.stat.normpdf( i, mu1, sigma )]);		
+	}
+
+	var plist2 = [];
+	for ( var i = mu2 - 15; i < mu2 + 15; i+=0.5 )
+	{
+		plist2.push( [i, jMath.stat.normpdf( i, mu2, sigma )]);		
+	}
+
+	var a = jMath.stat.norminv(0.025, mu1, sigma);
+	var b = jMath.stat.norminv(0.975, mu1, sigma);
+
+	var area1 = [];
+	var area2 = [];
+
+	var area3 = [];
+	for ( var i = 0 ; i <= a; i+=0.5 )
+	{
+		area1.push( [i, jMath.stat.normpdf( i, mu1, sigma )]);		
+	}
+	for ( var i = b ; i <= 215; i+=0.5 )
+	{
+		area2.push( [i, jMath.stat.normpdf( i, mu1, sigma )]);		
+	}
+	for ( var i = mu2 - 15; i <= b; i+=0.5)
+	{
+		area3.push( [i, jMath.stat.normpdf( i, mu2, sigma )]);		
+	}
+	area3.push( [b, jMath.stat.normpdf( b, mu2, sigma )]);		
+
+	var title = {
+		text: 'PC방 팔거리 교체 평균: ' + mu1 + '일, 실제 교체평균: ' + mu2 + '일' + sigma.toFixed(2),
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '단위:일',
+		tickInterval: 5,
+		min: 185,
+		max: 225,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area1,area2,area3,plist1,plist2], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				fill:true,
+				fillColor: 'blue',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

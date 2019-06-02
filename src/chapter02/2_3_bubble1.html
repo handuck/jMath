@@ -1,0 +1,69 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.bubbleRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+  
+	// 인원(x), 항공편수(y), 무게, 지역
+	var list = [ [7187,72,70, '무안동'], [16207,124,137, '군산시'],
+    			 [14034,156,64, '사천시'], [8555,60, 46, '원주시'],
+    			 [23747,262,78, '포항시']];
+
+	for ( var i = 0  ; i < list.length; i++ )
+	{
+        //승객수 1000명 단위로 조정
+		list[i][0] = Math.round(list[i][0] / 1000);
+        // 비행기 편당 화물(톤)
+        list[i][2] = list[i][2] / list[i][1];
+	}
+
+	var title = {
+		text: '2012년 5월 지방 공항별 수송현황',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickOptions: {
+			formatString: '%d천명'
+		}		
+	};
+
+	var yaxis = {
+        min: 0,
+		tickOptions: {
+			formatString: '%d편'
+		}		
+	};
+
+	var series = {
+		renderer: $.jqplot.BubbleRenderer,
+		rendererOptions: {
+			bubbleAlpha: 0.6,
+			highlightAlpha: 0.8,
+			bubbleGradients: true
+		},
+		shadow: true,
+		shadowAlpha: 0.05
+	};
+  
+	$.jqplot('chart', [list], {
+	 	title: title,
+		seriesDefaults: series,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		}
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

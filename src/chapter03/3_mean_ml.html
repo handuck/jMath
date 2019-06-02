@@ -1,0 +1,53 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var list = [4, 6, 25, 33, 48, 42, 27, 4, 1].map( function(v,idx){
+		return [ 198 + idx * 0.5,v];
+	});
+
+	var title = {
+		text: '캔커피 200ml의 용량 테스트',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+	var xaxis = {
+		min: 197.5,
+		max: 202.5,
+		tickInterval: 0.5,
+	};
+
+	var yaxis = {
+		label : '개수'
+	};
+
+	var series = {
+		renderer: $.jqplot.BarRenderer,
+		rendererOptions: {
+			barWidth: 20,    
+			fillToZero: true  
+		}
+	}
+
+	$.jqplot('chart', [list], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: series
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

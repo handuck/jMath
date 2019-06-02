@@ -1,0 +1,12 @@
+<html>
+	<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+	<script type="text/javascript" src="../js/jstat.min.js"></script>
+	<script type="text/javascript">
+$(function(){	
+	var numDefects = jStat([0,1,2,3]);
+	var numDays = jStat([27,31,28,5]);
+	var mean = jStat.dot( numDefects[0], numDays[0] ) / numDays.sum();
+	console.log( mean );
+});
+	</script>
+</html>

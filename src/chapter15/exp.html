@@ -1,0 +1,109 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var ts = [
+		jMath([[1,138],[2,105],[3,123],[4,71],[5,52],[6,130],[7,93],[8,72],[9,81],[10,67],[11,53],[12,52]]), 
+		jMath([[1,146],[2,121],[3,112],[4,92],[5,73],[6,172],[7,81],[8,93],[9,103],[10,83],[11,91],[12,87]]),
+		jMath([[1,151],[2,133],[3,121],[4,102],[5,91],[6,196],[7,131],[8,121],[9,112],[10,101],[11,132],[12,112]])
+	];
+	var list = jMath.joinByRow(ts);
+//	list = jMath([ [1,97], [2,142], [3,108], [4,135], [5,120], [6,164], [7,126], [8,150], [9,123], [10,151], [11,141], [12,142] ]);
+	for ( var i = 0 ; i < list.rows ; i++ )
+	{
+		list[i][0] = i+1;
+	}
+	var fcast3 = list.forecast('exp',0.3);
+	var fcast5 = list.forecast('exp',0.8);
+	console.log( fcast3.mad, fcast5.mad );
+
+	var title = {
+		text: '2011~2013 신규가입 학원생수 ES 예측',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		min: 0, 
+		max: list.length+1,
+		tickInterval: 1,
+		label : '월'
+	};
+
+	var yaxis = {
+		label : '학원생수',
+	};
+
+	var series = {
+		renderer: $.jqplot.LineRenderer,
+		showMarker: false,
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '실제값', '예측값(\u03B1=0.3)', '예측값(\u03B1=0.8)' ],
+		location: 'nw'
+	}
+
+	$.jqplot('chart1', [list.toArray(), fcast3.toArray(), fcast5.toArray() ], {
+	 	title: title,
+		legend: legend,
+	  	axes: {
+		xaxis: {
+			min: 0, 
+			max: list.length+1,
+			tickInterval: 1,
+			label : '월'
+		},
+			yaxis: yaxis
+		},
+		seriesDefaults: series
+	});
+
+	var mads = [];
+	for ( var i = 0.1 ; i < 0.95; i+= 0.02 )
+	{
+		var r = list.forecast( 'exp', i );
+		mads.push( [ i, r.mad ] );
+	}
+
+	title = {
+		text: '\u03B1에 따른 2011~2013 신규가입 학원생수 MAD변화',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+
+	$.jqplot('chart2', [mads], {
+	 	title: title,
+	  	axes: {
+		xaxis: {
+			min: 0, 
+			max: 1,
+			label : '\u03B1',
+			tickInterval: 0.1,
+		},
+		yaxis: {
+			label : 'MAD'
+		}
+		},
+		seriesDefaults: series
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart1" style="width:600px;height:400px"></div>
+		<p>
+		<div id="chart2" style="width:600px;height:300px"></div>
+	</body>
+</html>

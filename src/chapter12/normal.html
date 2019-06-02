@@ -1,0 +1,183 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var data = jMath([259,338,312,305,321,310,262,294,294,279,
+			367,265,281,272,253,292,289,361,290,257,
+			364,349,291,240,282,294,311,290,318,316,
+			250,262,270,280,287,300,179,282,350,257,
+			337,314,299,307,237,297,364,304,302,271]);
+/*
+	var data = jMath([549, 656, 582, 635, 606, 619, 730, 
+			570, 686, 628, 627, 596, 593, 647, 
+			647, 643, 731, 623, 527, 649, 566,
+			561, 537, 562, 536, 663, 468, 444,
+			620, 640, 625, 624, 569, 623, 548,
+			569, 593, 590, 603, 707]);
+*/
+	var result =  data.fitness_norm(0.05, 4);
+	console.log(result);
+
+	var plist = [];
+	var sum = 0;
+	for ( var i = 0.05; i < 5; i+=0.05 )
+	{
+		plist.push( [i, jMath.stat.chi2pdf(i, result.df)]);		
+	}
+
+	var b = jMath.stat.chi2inv(1-result.alpha, result.df);
+
+	var area = [];
+	for ( var i = b ; i <= 5; i+=0.05 )
+	{
+		area.push( [i, jMath.stat.chi2pdf( i, result.df)]);		
+	}
+
+	var line = [];
+	line.push( [ result.chi2, 0 ] );
+	line.push( [ result.chi2, jMath.stat.chi2pdf(result.chi2,result.df) ] );
+
+	var title = {
+		text: '\u03C7<sup>2</sup> distribution with DF '+ result.df,
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		tickInterval: 1,
+		min: 0,
+		max: 5,
+		tickOptions: {
+			formatString: '%3.1f'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist,line], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			},
+			{
+				color: 'red',
+				linePattern: 'dashed'
+			}
+		]
+	});						
+
+	var obs = [];
+	var expect = [];
+	var chi2 = [];
+
+	for ( var i = -3.0; i < 3.0 ; i += 0.05 )
+	{
+		expect.push( [ i,  jMath.stat.normpdf(i,0,1) ]);
+	}
+	for ( var i = 0 ; i < result.histogram.length ; i++ )
+	{
+		obs.push( [ parseFloat(result.histogram[i][0]) + result.interval/2, result.prop[0][i] ]);
+	}
+
+	title = {
+		text: 'Normal Distribution',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	xaxis = {
+		label: 'z-score',
+	  	min: -3, 
+		max: 3,
+		tickInterval: 1,
+	};
+
+	yaxis = {
+		max: 0.6,
+		min: 0,
+		label : '비율',
+		tickOptions: {
+		// bar위의 값은 yaxis.tickOptions.formatString을 이용합니다.
+			formatString: '%3.2f'
+		}		
+	};
+
+	var barSeries = {
+		showMarker: false,
+		showLine: true,
+		// bar위에 값을 추가 합니다.
+		// pointLabels.min.js가 필요합니다.
+	}
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '측정값', '기대값', 'chi2 비율' ]
+	}
+
+	$.jqplot('bar', [obs,expect], {
+		title: title,
+		axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{
+				renderer: $.jqplot.BarRenderer,
+				rendererOptions: {
+					barWidth: 20,
+					fillToZero: true
+				},
+			},
+			barSeries,
+			{
+				showMarker: false,
+				showLine: true,
+				color: 'red'
+			}
+		],
+		legend: legend
+	});			
+
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+		<p>
+		<div id="bar" style="width:600px;height:300px"></div>
+	</body>
+</html>

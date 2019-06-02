@@ -1,0 +1,81 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+$(function(){
+
+	var mu = 35.4;
+	var sigma = 8/Math.sqrt(30);
+
+	var plist = [];
+	for ( var i = 30; i < 40; i+=0.05 )
+	{
+		plist.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var b = jMath.stat.norminv(0.05, mu, sigma);
+
+	var area = [];
+	for ( var i = 30 ; i <= b; i+=0.05 )
+	{
+		area.push( [i, jMath.stat.normpdf( i, mu, sigma )]);		
+	}
+
+	var title = {
+		text: '냉장고 전력소비량: ' + mu + 'kWh, Sample 평균 표준편차: ' + sigma.toFixed(2),
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '단위:kWh',
+		tickInterval: 1,
+		min: 30,
+		max: 40,
+		tickOptions: {
+			formatString: '%d'
+		}		
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: '%3.2f'
+		}		
+	};
+
+	$.jqplot('chart', [area,plist], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		seriesDefaults: {
+			showMarker: false,
+			shadow: false
+		},
+		series: [
+			{
+				showMarker: false,
+				fill:true,
+				fillColor: 'gold',
+			}, 
+			{
+				color: 'green'
+			}
+		]
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

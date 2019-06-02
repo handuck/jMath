@@ -1,0 +1,47 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+$(function(){
+	var data = jMath( [ 
+		[ 52438, 2, 27995 ], 
+		[ 30815, 7, 22500 ],
+		[ 18260, 5, 21490 ],
+		[ 36504, 3, 20400 ],
+		[ 23781, 3, 19495 ],
+		[ 33796, 7, 18700 ],
+		[ 51706, 3, 15995 ],
+		[ 78251, 5, 15000 ],
+		[ 44692, 4, 13990 ],
+		[ 59060, 5, 13900 ],
+		[ 62330, 4, 13899 ],
+		[ 86137, 4, 13500 ],
+		[ 53969, 5, 12999 ],
+		[ 54718, 9, 12500 ],
+		[ 50366, 5, 11600 ],
+		[ 64567, 7, 11400 ],
+		[ 69953, 4, 11295 ],
+		[ 92367, 6, 9995 ],
+		[ 78880, 8, 9995 ],
+		[ 55512, 8, 9600 ]
+	]);
+	var result = data.regress( 0.05, [ [ 76320, 6 ] ]   );
+	console.log(result);
+	/*
+	var se1 = result.se/vs[0][1]/Math.sqrt(YX.rows*( 1 - vif.r2.value) );
+	var se2 = result.se/vs[0][2]/Math.sqrt(YX.rows*( 1 - vif.r2.value) );
+	console.log(se1, se2 );
+	*/
+	
+});
+		</script>
+	<body>
+
+	</body>
+</html>

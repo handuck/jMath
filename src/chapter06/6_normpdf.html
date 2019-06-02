@@ -1,0 +1,67 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jstat.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+	var pdist = [];
+	var mu = 200;
+	var sigma = 4;
+	for ( var i = 186; i <= 214; i+=0.5 )
+	{
+		pdist.push( [ i, jMath.stat.normpdf( i, mu, sigma) ]);
+	}
+
+	var muline = [ [ mu, 0], [mu, jMath.stat.normpdf( mu, mu, sigma )] ];
+
+	var title = {
+		text: '철판을 200mm단위로 자른 결과:<br>평균 200mm, 표준편차: 4mm',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	var xaxis = {
+		label: '길이(mm)',
+		min: 185,
+		max: 215
+	};
+
+	var yaxis = {
+		label : '확률',
+		min: 0,
+		tickOptions: {
+			formatString: "%3.2f"
+		}		
+	};
+
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ 'sigma=2', 'sigma=4', 'sigma=6']
+	}
+
+	$.jqplot('chart', [ pdist, muline ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		series: [
+			{ showMarker: false },
+			{ showMarker: false, color: 'red', linePattern: 'dashed' },
+		],
+		legend: legend		
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:330px"></div>
+	</body>
+</html>

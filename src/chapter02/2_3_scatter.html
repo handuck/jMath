@@ -1,0 +1,86 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+  
+// 값 생성
+	var values1 = [];
+	var values2 = [];
+	var values3 = [];
+
+	for ( var i = 0 ; i < 10 ; i++ )
+	{
+		values1[i] = [ i+1, parseInt(100 + Math.random() * 100) ];
+		values2[i] = [ i+1, parseInt( 10 + Math.random() * 20 + i * 10) ];
+		values3[i] = [ i+1, parseInt( 50 + Math.random() * 5 + i * 2) ];
+	}
+
+// 타이틀 꾸미기
+	var title = {
+		text: '온라인 광고수 대비 방문자수 비교',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+  
+// ticks을 사용해서 x좌표에 표시될 값을 직접 알려줍니다.
+	var xaxis = {
+		label : '금액(단위 백만원)',
+		ticks: [ 0, 2, 4, 6, 8, 10, 11 ],
+		tickOptions: {
+            // 기본이 실수형태이기 때문에 정수로 나타내주기 사용됩니다.
+			formatString: '%d'
+		}		
+	};
+// pad를 이용해서 y의 최대, 최소범위에 1.05배로 확장합니다.
+// 만일 max, min보다 이 값이 작다면 max, min으로 대신 사용됩니다.
+	var yaxis = {
+		label : '방문자수',
+		pad: 1.05,
+		tickOptions: {
+			formatString: '%d명'
+		}		
+	};
+
+// marker를 어떤 형태로 사용할 것인가를 알려 줍니다.
+// series별로 값을 따로 지정해야 합니다.
+	var series = [ 
+		{ markerOptions: { style: 'diamond' } },
+		{ markerOptions: { style: 'circle' } },
+		{ markerOptions: { style: 'filledSquare' } }
+	];
+
+// legend를 placement를 이용 그래프 밖으로 보냅니다.
+	var legend = {
+		renderer: $.jqplot.EnhancedLegendRenderer,
+		show: true,
+		labels: [ '제품1', '제품2', '제품3' ],
+		placement: 'outsideGrid'
+	}
+
+	$.jqplot('chart', [values1, values2, values3], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		legend: legend,
+// 모든 series에 공통으로 적용되는 값입니다.
+		seriesDefaults: {
+			showLine: false,
+			showMarker: true,
+		},
+		series: series
+	});						
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:600px;height:300px"></div>
+	</body>
+</html>

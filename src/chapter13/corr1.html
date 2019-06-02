@@ -1,0 +1,102 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/jMath.js"></script>
+		<script type="text/javascript" src="../js/jMath.stat.js"></script>
+		<script type="text/javascript">
+
+
+function plot(elementId, data, title, xtitle, ytitle )
+{
+	var result = data.corrcoef();
+	console.log(result);
+	var title = {
+		text: title + '( r : ' + result.r.toFixed(2) + ' )',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+// ticks을 사용해서 x좌표에 표시될 값을 직접 알려줍니다.
+	var xaxis = {
+		label: xtitle,
+		tickInterval: 1,
+		tickOptions: {
+            // 기본이 실수형태이기 때문에 정수로 나타내주기 사용됩니다.
+			formatString: '%d'
+		}		
+	};
+// pad를 이용해서 y의 최대, 최소범위에 1.05배로 확장합니다.
+// 만일 max, min보다 이 값이 작다면 max, min으로 대신 사용됩니다.
+	var yaxis = {
+		label: ytitle,
+		pad: 1.05,
+	};
+  
+	$.jqplot(elementId, [ data.toArray() ], {
+	 	title: title,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+// 모든 series에 공통으로 적용되는 값입니다.
+		seriesDefaults: {
+			showLine: false,
+			showMarker: true,
+			markerOptions: { size: 10, style: 'filledCircle' }
+		}
+	});						
+}
+
+
+$(function(){
+	var data1 = jMath([ [1,10], [2,20], [3,30], [4,40], [5,50], [6,60]]);
+	var data_1 = jMath([ [1,50], [2,46], [3,42], [4,38], [5,34], [6,30]]);
+	plot( 'rho1', data1, '알바임금', '시간', '금액 천원 단위');
+	plot( 'rho-1', data_1, '연료량', '시간', '리터');
+
+
+	var data0 = jMath([[1.3, 190.9],
+		            [1.8, 148.2],
+					[2.1, 151.2],
+					[3.7, 224.4],
+					[4.2, 211],
+					[4.7,143.6],
+					[4.6,192.3],
+					[5.8,210.3],
+					[3.2,136],
+					[3.2,191.8],
+					[1.6,189.7],
+					[1.4,119],
+					[2,230.4],
+					[1.5,135.8],
+					[2.6,150.6],
+					[4, 141]]);
+	plot( 'rho0', data05, '교통사고', '사망자수', '사고률');
+
+});
+		</script>
+	</head>
+	<body>
+		<table>	
+			<td>
+				<div id="rho1" style="width:300px;height:300px"></div>
+			</td> <td>
+				<div id="rho-1" style="width:300px;height:300px"></div>
+			</td>
+		</table>
+		<table>	
+			<td>
+				<div id="rho05" style="width:300px;height:300px"></div>
+			</td>
+			<td>
+				<div id="rho-05" style="width:300px;height:300px"></div>
+			</td>
+		</table>
+		<div id="rho0" style="width:300px;height:300px"></div>
+	</body>
+	</body>
+</html>

@@ -1,0 +1,126 @@
+<html>
+	<meta charset="utf-8">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/jquery.jqplot.min.css">
+		<script type="text/javascript" src="../js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.ohlcRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.dateAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="../js/plugins/jqplot.highlighter.min.js"></script>
+		<script type="text/javascript">
+$(function(){
+  
+	// 주가 :  [날짜,시가,최고,최저,종가]
+	var list = [  
+		['2013/02/07',200500,203000,199000,200000],
+		['2013/02/08',200500,210500,200000,209500],
+		['2013/02/12',211500,212500,209000,211500],
+		['2013/02/13',213500,217000,211500,216500],
+		['2013/02/14',216500,218000,214500,216500],
+		['2013/02/15',215000,217500,211500,213500],
+		['2013/02/18',210000,212500,208000,209500],
+		['2013/02/19',210000,213000,209500,210500],
+		['2013/02/20',213500,217500,213000,217000],
+		['2013/02/21',216000,218000,215000,216000],
+		['2013/02/22',217500,220000,215500,219000],
+		['2013/02/25',218000,218000,214500,214500],
+		['2013/02/26',213500,214500,212000,213500],
+		['2013/02/27',214500,217500,214000,215000],
+		['2013/02/28',216500,219000,215000,218000],
+		['2013/03/04',219500,222500,217000,219500],
+		['2013/03/05',222500,224500,220000,221000],
+		['2013/03/06',222000,223000,215500,217500],
+		['2013/03/07',219000,219000,213500,216000],
+		['2013/03/08',213000,216000,211500,213500],
+		['2013/03/11',210000,210000,206500,208500],
+		['2013/03/12',210500,212000,208500,210500],
+		['2013/03/13',209500,211500,209000,210000],
+		['2013/03/14',210000,212500,209000,212000],
+		['2013/03/15',213000,221500,213000,220000],
+		['2013/03/18',223000,223500,218000,219000],
+		['2013/03/19',219500,221500,216000,218000],
+		['2013/03/20',217000,220500,215000,217500],
+		['2013/03/21',219000,220000,215000,215000],
+		['2013/03/22',214000,217000,213500,214500] ];
+
+	var title = {
+		text: '2013/02/07 ~ 2013/03/22 현대차 주식',
+		fontSize: 20,
+		fontFamily: 'malgungothic',
+		textColor: 'royalblue'
+	};
+
+	// 날짜 표시를 위해 DateAxisRendere 사용
+	var xaxis = {
+		label: '날짜',
+		renderer: $.jqplot.DateAxisRenderer,
+		min: '2013/02/06',
+		max: '2013/03/23',
+		tickOptions: {
+			formatString: '%m/%d',
+			tickInterval: '1 week'
+		}		
+	};
+
+	var yaxis = {
+		label: '가격',
+		tickOptions: {
+			// y축의 tick값 조정
+			formatter: function(fmt,v)
+			{
+				return "₩" + (v/1000).toLocaleString() + '천원'
+			},	
+		}		
+	};
+
+	// 캔들차트 그리기
+	var series = {
+		renderer: $.jqplot.OHLCRenderer,
+		rendererOptions: {
+			candleStick: true,
+			// 상가일때 색
+			upBodyColor: 'red',
+			// 하가일때 색
+			downBodyColor: 'blue',
+			// 몸통색깔 채우기
+			fillUpBody: true,
+			fillDownBody: true,
+		},
+		// 시가와 종가가 같을 때 색깔을 검정색으로
+		color: 'black'
+	};
+
+	// 마우스를 캔들위로 이동하였을때 정보 표시
+	var hl = {
+		show: true,
+		// 해당 캔들에 점을 보여줄 것인가
+		showMarker: false,
+		// 보여줄 값들 
+		tooltipAxes: 'xy',
+		yvalues: 4,
+		formatString: '<table class="jqplot-highlighter">\
+			<tr><td>날짜:</td><td>%s</td>\
+			<tr><td>시가:</td><td>%s</td>\
+			<tr><td>최대:</td><td>%s</td>\
+			<tr><td>최소:</td><td>%s</td>\
+			<tr><td>종가:</td><td>%s</td>'
+	};
+  
+	$.jqplot('chart', [list], {
+	 	title: title,
+		seriesDefaults: series,
+	  	axes: {
+			xaxis: xaxis,
+			yaxis: yaxis,
+		},
+		highlighter: hl,
+        animate: true,
+        animateReplot: true,
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div id="chart" style="width:650px;height:300px"></div>
+	</body>
+</html>
